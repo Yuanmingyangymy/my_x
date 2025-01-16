@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import Image from "./Image";
 
 const menuInfo = [
   {
@@ -52,7 +52,7 @@ export default function LeftBar() {
       <div className="flex flex-col gap-4 items-center text-lg xxl:items-start">
         {/* LOGO */}
         <Link href="/" className="hover:bg-[#181818] p-4 rounded-full">
-          <Image src="icons/logo.svg" alt="logo" width={24} height={24} />
+          <Image path="icons/logo.svg" alt="logo" w={24} h={24} />
         </Link>
         {/* Menu */}
         <div className="flex flex-col gap-4">
@@ -62,7 +62,7 @@ export default function LeftBar() {
               key={item.icon}
               className="flex gap-4 items-center p-2 rounded-full hover:bg-[#181818]"
             >
-              <Image src={item.icon} alt={item.name} width={24} height={24} />
+              <Image path={item.icon} alt={item.name} w={24} h={24} />
               <span className="hidden xxl:inline">{item.name}</span>
             </Link>
           ))}
@@ -72,7 +72,7 @@ export default function LeftBar() {
           href="/"
           className="bg-white rounded-full xxl:hidden w-12 h-12 flex items-center justify-center"
         >
-          <Image src="icons/post.svg" alt="new post" width={24} height={24} />
+          <Image path="icons/post.svg" alt="new post" w={24} h={24} />
         </Link>
         <Link
           href="/"
@@ -89,9 +89,9 @@ export default function LeftBar() {
         <div className="flex gap-2 items-center">
           <div>
             <Image
-              src="/general/avatar.png"
-              width={40}
-              height={40}
+              path="/general/avatar.png"
+              w={40}
+              h={40}
               alt="avatar"
               className="rounded-full"
             />
