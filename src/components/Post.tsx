@@ -1,9 +1,32 @@
-import React from "react";
 import Image from "./Image";
 import PostInteraction from "./PostInteraction";
 import PostMore from "./PostMore";
+import { imagekit } from "@/utils";
 
-export default function Post() {
+interface FileDetailResponse {
+  type: string;
+  width: number;
+  height: number;
+  customMetadata?: {
+    sensitive: boolean;
+  };
+  url: string;
+  filePath: string;
+  fileType: string;
+}
+
+export default async function Post() {
+  const getFileDetail = async (fileId: string): Promise<FileDetailResponse> => {
+    return new Promise((resolve, reject) => {
+      imagekit.getFileDetails(fileId, function (error, result) {
+        if (error) reject(error);
+        else resolve(result as FileDetailResponse);
+      });
+    });
+  };
+  const fileDetail = await getFileDetail("6789cd86432c47641695fd89");
+  console.log("getFileDetail", fileDetail);
+
   return (
     <div className="flex gap-4 p-4 border-y-[1px] border-borderGray">
       {/* 头像 */}
@@ -30,13 +53,18 @@ export default function Post() {
           porro, eum obcaecati.
         </p>
         {/* 媒体信息 */}
-        <Image
-          path="general/post.jpeg"
-          alt="avatar"
-          w={600}
-          h={600}
-          className="rounded"
-        />
+        {fileDetail && (
+          <Image
+            path={fileDetail.filePath}
+            alt="avatar"
+            w={fileDetail.width}
+            h={fileDetail.height}
+            className={`rounded-lg ${
+              fileDetail.customMetadata?.sensitive ? "blur-sm" : ""
+            }`}
+          />
+        )}
+
         {/* 互动 */}
         <PostInteraction />
       </div>
