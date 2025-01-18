@@ -2,6 +2,7 @@ import Image from "./Image";
 import PostInteraction from "./PostInteraction";
 import PostMore from "./PostMore";
 import { imagekit } from "@/utils";
+import Video from "./Video";
 
 interface FileDetailResponse {
   type: string;
@@ -24,8 +25,8 @@ export default async function Post() {
       });
     });
   };
-  const fileDetail = await getFileDetail("6789cd86432c47641695fd89");
-  console.log("getFileDetail", fileDetail);
+  const fileDetail = await getFileDetail("678b0cbf432c476416b2b8e7");
+  // console.log("getFileDetail", fileDetail);
 
   return (
     <div className="flex gap-4 p-4 border-y-[1px] border-borderGray">
@@ -53,12 +54,19 @@ export default async function Post() {
           porro, eum obcaecati.
         </p>
         {/* 媒体信息 */}
-        {fileDetail && (
+        {fileDetail && fileDetail.type === "image" ? (
           <Image
             path={fileDetail.filePath}
             alt="avatar"
             w={fileDetail.width}
             h={fileDetail.height}
+            className={`rounded-lg ${
+              fileDetail.customMetadata?.sensitive ? "blur-sm" : ""
+            }`}
+          />
+        ) : (
+          <Video
+            path={fileDetail.filePath}
             className={`rounded-lg ${
               fileDetail.customMetadata?.sensitive ? "blur-sm" : ""
             }`}

@@ -29,16 +29,18 @@ export const shareAction = async (
       file: buffer, //required
       fileName: file.name, //required
       folder: "/posts",
-      transformation: {
-        pre: trans,
-      },
+      ...(file.type.includes("image") && {
+        transformation: {
+          pre: trans,
+        },
+      }),
       customMetadata: {
         sensitive: settings.sensitive,
       },
     },
     function (error, result) {
       if (error) console.log(error);
-      else console.log(result);
+      else console.log("upload😁", result);
     }
   );
 };

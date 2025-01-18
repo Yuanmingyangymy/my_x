@@ -4,45 +4,51 @@ import Image from "./Image";
 
 const menuInfo = [
   {
+    // 自己以及关注的人的动态
     name: "Home",
     icon: "icons/home.svg",
     link: "/",
   },
   {
+    // 使用用户的动态（时间排序）
     name: "Explore",
     icon: "icons/explore.svg",
     link: "/",
   },
   {
+    // 自己帖子的赞和评论，其他用户@自己的通知
     name: "Notifications",
     icon: "icons/notification.svg",
     link: "/",
   },
   {
+    // 私信功能
     name: "Messages",
     icon: "icons/message.svg",
     link: "/",
   },
   {
+    // 收藏的帖子
     name: "Bookmarks",
     icon: "icons/bookmark.svg",
     link: "/",
   },
   {
-    name: "Communities",
-    icon: "icons/community.svg",
-    link: "/",
-  },
-  {
+    // 个人信息页面（发布的帖子、关注的用户）
     name: "Profile",
     icon: "icons/profile.svg",
     link: "/",
   },
-  {
-    name: "More",
-    icon: "icons/more.svg",
-    link: "/",
-  },
+  // {
+  //   name: "Communities",
+  //   icon: "icons/community.svg",
+  //   link: "/",
+  // },
+  // {
+  //   name: "More",
+  //   icon: "icons/more.svg",
+  //   link: "/",
+  // },
 ];
 
 export default function LeftBar() {
@@ -63,7 +69,7 @@ export default function LeftBar() {
               className="flex gap-4 items-center p-2 rounded-full hover:bg-[#181818]"
             >
               <Image path={item.icon} alt={item.name} w={24} h={24} />
-              <span className="hidden xxl:inline">{item.name}</span>
+              <span className="hidden xxl:inline text-2xl">{item.name}</span>
             </Link>
           ))}
         </div>
@@ -81,7 +87,7 @@ export default function LeftBar() {
           Post
         </Link>
       </div>
-      {/* User */}
+      {/* 用户信息 */}
       <Link
         href="/"
         className="flex justify-between items-center hover:bg-[#181818] p-2 rounded-full"

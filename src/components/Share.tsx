@@ -13,7 +13,7 @@ export default function Share() {
     sensitive: false,
   });
 
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setMedia(e.target.files[0]);
     }
@@ -43,7 +43,7 @@ export default function Share() {
           className="outline-none bg-transparent text-xl placeholder:text-textGray"
         />
         {/* 图片预览 */}
-        {previewUrl && (
+        {media?.type.includes("image") && previewUrl && (
           <div className="relative overflow-hidden rounded-xl">
             <NextImage
               src={previewUrl}
@@ -64,6 +64,24 @@ export default function Share() {
             >
               Edit
             </div>
+            <div
+              className="absolute h-8 w-8 top-2 right-2 flex items-center justify-center rounded-full text-white bg-black bg-opacity-50 text-sm cursor-pointer hover:bg-opacity-100"
+              onClick={() => setMedia(null)}
+            >
+              X
+            </div>
+          </div>
+        )}
+        {/* 视频预览 */}
+        {media?.type.includes("video") && previewUrl && (
+          <div className="relative">
+            <video src={previewUrl} controls />
+            <div
+              className="absolute h-8 w-8 top-2 right-2 flex items-center justify-center rounded-full text-white bg-black bg-opacity-50 text-sm cursor-pointer hover:bg-opacity-100"
+              onClick={() => setMedia(null)}
+            >
+              X
+            </div>
           </div>
         )}
         {isEditorOpen && previewUrl && (
@@ -76,14 +94,14 @@ export default function Share() {
         )}
         <div className="flex justify-between items-center py-2">
           <div className="flex gap-2">
-            {/* 选择图片 */}
+            {/* 选择媒体文件 */}
             <input
               type="file"
               id="file"
               name="file"
               className="hidden"
               accept="image/*, video/*"
-              onChange={handleImageSelect}
+              onChange={handleFileSelect}
             />
             <label htmlFor="file">
               <Image
