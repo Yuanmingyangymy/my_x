@@ -5,36 +5,42 @@ import Image from "./Image";
 const menuInfo = [
   {
     // 自己以及关注的人的动态
+    id: 1,
     name: "Home",
     icon: "icons/home.svg",
     link: "/",
   },
   {
     // 使用用户的动态（时间排序）
+    id: 2,
     name: "Explore",
     icon: "icons/explore.svg",
     link: "/",
   },
   {
     // 自己帖子的赞和评论，其他用户@自己的通知
+    id: 3,
     name: "Notifications",
     icon: "icons/notification.svg",
     link: "/",
   },
   {
     // 私信功能
+    id: 4,
     name: "Messages",
     icon: "icons/message.svg",
     link: "/",
   },
   {
     // 收藏的帖子
+    id: 5,
     name: "Bookmarks",
     icon: "icons/bookmark.svg",
     link: "/",
   },
   {
     // 个人信息页面（发布的帖子、关注的用户）
+    id: 6,
     name: "Profile",
     icon: "icons/profile.svg",
     link: "/",
@@ -50,7 +56,6 @@ const menuInfo = [
   //   link: "/",
   // },
 ];
-
 export default function LeftBar() {
   return (
     <div className="flex flex-col justify-between h-screen sticky top-0 pt-2 pb-8">
@@ -75,13 +80,13 @@ export default function LeftBar() {
         </div>
         {/* Post */}
         <Link
-          href="/"
+          href="/compose/post"
           className="bg-white rounded-full xxl:hidden w-12 h-12 flex items-center justify-center"
         >
           <Image path="icons/post.svg" alt="new post" w={24} h={24} />
         </Link>
         <Link
-          href="/"
+          href="/compose/post"
           className="bg-white rounded-full text-black py-2 px-20 font-bold hidden xxl:block"
         >
           Post
