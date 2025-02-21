@@ -1,5 +1,5 @@
 {
-  "name": "xui",
+  "name": "my",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,12 +12,16 @@
     "@clerk/elements": "^0.22.13",
     "@clerk/nextjs": "^6.11.0",
     "@prisma/client": "^6.3.1",
+    "@tanstack/react-query": "^5.66.5",
     "imagekit": "^6.0.0",
     "imagekitio-next": "^1.0.1",
     "next": "15.1.0",
     "prisma": "^6.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "svix": "^1.59.1",
+    "timeago.js": "^4.0.2",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {

@@ -1,38 +1,36 @@
-import React from "react";
-import Post from "./Post";
 import { prisma } from "@/prisma";
 import { auth } from "@clerk/nextjs/server";
-import InfinitePosts from "./InfinitePosts";
+import { NextRequest } from "next/server";
 
-export default async function Posts({
-  userProfileId,
-}: {
-  userProfileId?: string;
-}) {
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+
+  const userProfileId = searchParams.get("user");
+  const page = searchParams.get("cursor");
+  const LIMIT = 3;
+
   const { userId } = await auth();
+
   if (!userId) return;
 
-  // 获取用户自己以及关注人的帖子（不含评论的帖子）
-  const whereCondition = userProfileId
-    ? { parentPostId: null, userId: userProfileId }
-    : {
-        parentPostId: null,
-        userId: {
-          in: [
-            userId,
-            ...(
-              await prisma.follow.findMany({
-                where: {
-                  followerId: userId,
-                },
-                select: {
-                  followingId: true,
-                },
-              })
-            ).map((follow) => follow.followingId),
-          ],
-        },
-      };
+  const whereCondition =
+    userProfileId !== "undefined"
+      ? { parentPostId: null, userId: userProfileId as string }
+      : {
+          parentPostId: null,
+          userId: {
+            in: [
+              userId,
+              ...(
+                await prisma.follow.findMany({
+                  where: { followerId: userId },
+                  select: { followingId: true },
+                })
+              ).map((follow) => follow.followingId),
+            ],
+          },
+        };
+
   const posts = await prisma.post.findMany({
     where: whereCondition,
     include: {
@@ -117,23 +115,14 @@ export default async function Posts({
         },
       },
     },
-    take: 3,
-    skip: 0,
-    orderBy: {
-      createdAt: "desc",
-    },
+    take: LIMIT,
+    skip: (Number(page) - 1) * LIMIT,
+    orderBy: { createdAt: "desc" },
   });
 
-  return (
-    <div>
-      {posts.map((post) => {
-        return (
-          <div key={post.id}>
-            <Post post={post} />
-          </div>
-        );
-      })}
-      <InfinitePosts userProfileId={userProfileId} />
-    </div>
-  );
+  const totalPosts = await prisma.post.count({ where: whereCondition });
+
+  const hasMore = Number(page) * LIMIT < totalPosts;
+
+  return Response.json({ posts, hasMore });
 }

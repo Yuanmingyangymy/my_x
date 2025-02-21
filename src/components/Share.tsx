@@ -28,7 +28,7 @@ export default function Share() {
       {/* 头像 */}
       <div className="relative w-10 h-10 rounded-full overflow-hidden">
         <Image
-          path="general/avatar.png"
+          path="general/default.png"
           alt="avatar"
           w={100}
           h={100}
