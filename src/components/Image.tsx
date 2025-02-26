@@ -3,7 +3,8 @@
 import { IKImage } from "imagekitio-next";
 
 type ImageProps = {
-  path: string;
+  path?: string;
+  src?: string;
   w?: number;
   h?: number;
   alt: string;
@@ -13,11 +14,12 @@ type ImageProps = {
 
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 
-const Image = ({ path, w, h, alt, className, tr }: ImageProps) => {
+const Image = ({ path, src, w, h, alt, className, tr }: ImageProps) => {
   return (
     <IKImage
       urlEndpoint={urlEndpoint}
       path={path}
+      src={src}
       alt={alt}
       className={className}
       {...(tr

@@ -22,13 +22,12 @@ const SignUpPage = () => {
       </div>
       <div className="w-full lg:w-1/2 flex flex-col gap-4">
         <h1 className="text-2xl xsm:text-4xl md:text-6xl font-bold">
-          Happening now
+          欢迎加入MY
         </h1>
-        <h1 className="text-2xl ">Join today.</h1>
+        <h1 className="text-2xl ">Hello~</h1>
         <SignUp.Root>
           <SignUp.Step name="start" className="flex flex-col gap-4">
             <div className="flex flex-col gap-4">
-              Sign up with Credentials
               <Clerk.Field name="username" className="flex flex-col gap-2">
                 <Clerk.Input
                   className="py-2 px-6 rounded-full text-black w-72 placeholder:text-sm"
@@ -55,7 +54,7 @@ const SignUpPage = () => {
                 submit
                 className="bg-iconBlue rounded-full p-2 text-white font-bold w-72 text-center "
               >
-                Sign up
+                注册
               </SignUp.Action>
             </div>
           </SignUp.Step>
@@ -72,12 +71,12 @@ const SignUpPage = () => {
               submit
               className="w-72 text-center text-iconBlue underline"
             >
-              Continue
+              继续
             </SignUp.Action>
           </SignUp.Step>
           <SignUp.Step name="verifications">
             <SignUp.Strategy name="email_code">
-              <h1 className="text-sm mb-2">Check your e-mail</h1>
+              <h1 className="text-sm mb-2">查看你的邮箱</h1>
               <Clerk.Field name="code" className="flex flex-col gap-4">
                 <Clerk.Input
                   placeholder="Verification code"
@@ -89,28 +88,22 @@ const SignUpPage = () => {
                 submit
                 className="mt-2 underline text-iconBlue text-sm"
               >
-                Verify
+                验证
               </SignUp.Action>
             </SignUp.Strategy>
           </SignUp.Step>
           {/* OR SIGN UP */}
           <div className="w-72 flex items-center gap-4">
             <div className="h-px bg-borderGray flex-grow"></div>
-            <span className="text-textGrayLight">or</span>
+            <span className="text-textGrayLight">或</span>
             <div className="h-px bg-borderGray flex-grow"></div>
           </div>
           <Link
             href="/sign-in"
             className="bg-iconBlue rounded-full p-2 text-white font-bold w-72 text-center"
           >
-            Already have an account?
+            已有账户？
           </Link>
-          <p className="w-72 text-xs">
-            By signing up, you agree to the{" "}
-            <span className="text-iconBlue">Terms of Service</span> and{" "}
-            <span className="text-iconBlue">Privacy Policy</span>, including{" "}
-            <span className="text-iconBlue">Cookie Use</span>.
-          </p>
         </SignUp.Root>
       </div>
     </div>

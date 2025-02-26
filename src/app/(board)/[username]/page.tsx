@@ -5,19 +5,19 @@ import { prisma } from "@/prisma";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { followUser } from "../../../action";
 
 const UserPage = async ({
   params,
 }: {
-  params: {
-    username: string;
-  };
+  params: Promise<{ username: string }>;
 }) => {
   const { userId } = await auth();
+  const username = (await params).username;
 
   const user = await prisma.user.findUnique({
     where: {
-      username: params.username,
+      username: username,
     },
     include: {
       _count: {
@@ -79,7 +79,12 @@ const UserPage = async ({
           <div className="w-9 h-9 flex items-center justify-center rounded-full border-[1px] border-gray-500 cursor-pointer">
             <Image path="icons/message.svg" alt="more" w={20} h={20} />
           </div>
-          {userId && <FollowButton isFollowed={!!user.followings.length} />}
+          {userId && (
+            <FollowButton
+              isFollowed={!!user.followings.length}
+              userId={user.id}
+            />
+          )}
         </div>
         {/* 详细信息 */}
         <div className="p-4 flex flex-col gap-2">

@@ -1,7 +1,5 @@
-import { imagekit } from "@/utils";
 import Image from "./Image";
 import PostInteractions from "./PostInteractions";
-import Video from "./Video";
 import Link from "next/link";
 import PostMore from "./PostMore";
 import { Post as PostType } from "@prisma/client";
@@ -150,13 +148,20 @@ const Post = ({
             </p>
           </Link>
           {originalPost.img && (
-            <Image path={originalPost.img} alt="" w={600} h={600} />
+            <Image
+              path={originalPost.img}
+              alt=""
+              w={600}
+              h={originalPost.imgHeight || 600}
+            />
           )}
 
           {type === "status" && (
             <span className="text-textGray">8:41 PM · Dec 5, 2024</span>
           )}
           <PostInteractions
+            username={originalPost.user.username}
+            postId={originalPost.id}
             count={originalPost._count}
             isLiked={!!originalPost.likes.length}
             isReposted={!!originalPost.rePosts.length}

@@ -6,42 +6,42 @@ const menuInfo = [
   {
     // 自己以及关注的人的动态
     id: 1,
-    name: "Home",
+    name: "首页",
     icon: "icons/home.svg",
     link: "/",
   },
   {
     // 使用用户的动态（时间排序）
     id: 2,
-    name: "Explore",
+    name: "探索",
     icon: "icons/explore.svg",
     link: "/",
   },
   {
     // 自己帖子的赞和评论，其他用户@自己的通知
     id: 3,
-    name: "Notifications",
+    name: "通知",
     icon: "icons/notification.svg",
     link: "/",
   },
   {
     // 私信功能
     id: 4,
-    name: "Messages",
+    name: "聊天",
     icon: "icons/message.svg",
     link: "/",
   },
   {
     // 收藏的帖子
     id: 5,
-    name: "Bookmarks",
+    name: "收藏",
     icon: "icons/bookmark.svg",
     link: "/",
   },
   {
     // 个人信息页面（发布的帖子、关注的用户）
     id: 6,
-    name: "Profile",
+    name: "我的",
     icon: "icons/profile.svg",
     link: "/",
   },
@@ -89,7 +89,7 @@ export default function LeftBar() {
           href="/compose/post"
           className="bg-white rounded-full text-black py-2 px-20 font-bold hidden xxl:block"
         >
-          Post
+          发帖
         </Link>
       </div>
       {/* 用户信息 */}

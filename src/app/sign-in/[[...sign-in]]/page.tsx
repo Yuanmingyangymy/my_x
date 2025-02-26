@@ -120,7 +120,7 @@ const SignInPage = () => {
           {/* OR SIGN UP */}
           <div className="w-72 flex items-center gap-4">
             <div className="h-px bg-borderGray flex-grow"></div>
-            <span className="text-textGrayLight">or</span>
+            <span className="text-textGrayLight">或</span>
             <div className="h-px bg-borderGray flex-grow"></div>
           </div>
           <Link
@@ -129,12 +129,6 @@ const SignInPage = () => {
           >
             创建账户
           </Link>
-          <p className="w-72 text-xs">
-            By signing up, you agree to the{" "}
-            <span className="text-iconBlue">Terms of Service</span> and{" "}
-            <span className="text-iconBlue">Privacy Policy</span>, including{" "}
-            <span className="text-iconBlue">Cookie Use</span>.
-          </p>
         </SignIn.Root>
       </div>
     </div>

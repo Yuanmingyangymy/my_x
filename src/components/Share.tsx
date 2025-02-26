@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useActionState, useEffect, useRef, useState } from "react";
 import Image from "./Image";
 import NextImage from "next/image";
-import { shareAction } from "@/actions";
 import ImageEditor from "./ImageEditor";
+import { useUser } from "@clerk/nextjs";
+import { addPost } from "@/action";
 
 export default function Share() {
   const [media, setMedia] = useState<File | null>(null);
@@ -12,6 +13,7 @@ export default function Share() {
     type: "original" as "original" | "wide" | "square",
     sensitive: false,
   });
+  const { user } = useUser();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
@@ -20,26 +22,46 @@ export default function Share() {
   };
 
   const previewUrl = media ? URL.createObjectURL(media) : null;
+
+  const [state, formAction, isPending] = useActionState(addPost, {
+    success: false,
+    error: false,
+  });
+
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    if (state.success) {
+      formRef.current?.reset();
+      setMedia(null);
+      setSettings({ type: "original", sensitive: false });
+    }
+  }, [state]);
   return (
-    <form
-      className="flex gap-4 p-4"
-      action={(formData) => shareAction(formData, settings)}
-    >
+    <form ref={formRef} className="flex gap-4 p-4" action={formAction}>
       {/* 头像 */}
       <div className="relative w-10 h-10 rounded-full overflow-hidden">
-        <Image
-          path="general/default.png"
-          alt="avatar"
-          w={100}
-          h={100}
-          tr={true}
-        />
+        <Image src={user?.imageUrl} alt="avatar" w={100} h={100} tr={true} />
       </div>
       {/* 发帖部分 */}
       <div className="flex-1 flex flex-col gap-4">
         <input
+          type="text"
+          name="imgType"
+          value={settings.type}
+          hidden
+          readOnly
+        />
+        <input
+          type="text"
+          name="isSensitive"
+          value={settings.sensitive ? "true" : "false"}
+          hidden
+          readOnly
+        />
+        <input
           name="desc"
-          placeholder="What is happening?!"
+          placeholder="有什么新鲜事？！"
           className="outline-none bg-transparent text-xl placeholder:text-textGray"
         />
         {/* 图片预览 */}
@@ -148,9 +170,15 @@ export default function Share() {
               className="cursor-pointer"
             />
           </div>
-          <button className="bg-white rounded-full py-2 px-4 text-black font-bold">
-            Post
+          <button
+            className="bg-white text-black font-bold rounded-full py-2 px-4 disabled:cursor-not-allowed"
+            disabled={isPending}
+          >
+            {isPending ? "发布中..." : "发布"}
           </button>
+          {state.error && (
+            <span className="text-red-300 p-4">遇到问题了，请稍后再试</span>
+          )}
         </div>
       </div>
     </form>

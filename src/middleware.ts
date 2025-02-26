@@ -1,11 +1,26 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 // export default clerkMiddleware();
-const isPublicRoute = createRouteMatcher(["/sign-in(.*)"]);
+
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  // 添加 Webhook 路径为公开路由
+  "/api/webhooks/clerk(.*)",
+]);
 
 export default clerkMiddleware(async (auth, request) => {
+  // 如果是 Webhook 请求，直接放行
+  if (request.nextUrl.pathname.startsWith("/api/webhooks/clerk")) {
+    console.log("Webhook request detected, skipping authentication.");
+    return; // 跳过认证检查
+  }
+
+  // 其他非公开路由需要认证
   if (!isPublicRoute(request)) {
     await auth.protect();
+  } else {
+    console.log("Public route detected, allowing access.");
   }
 });
 
