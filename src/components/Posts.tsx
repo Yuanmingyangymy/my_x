@@ -33,89 +33,21 @@ export default async function Posts({
           ],
         },
       };
+
+  const postIncludeQuery = {
+    user: { select: { displayName: true, username: true, img: true } },
+    _count: { select: { likes: true, rePosts: true, comments: true } },
+    likes: { where: { userId: userId }, select: { id: true } },
+    rePosts: { where: { userId: userId }, select: { id: true } },
+    saves: { where: { userId: userId }, select: { id: true } },
+  };
   const posts = await prisma.post.findMany({
     where: whereCondition,
     include: {
-      user: {
-        select: {
-          displayName: true,
-          username: true,
-          img: true,
-        },
-      },
       rePost: {
-        include: {
-          user: {
-            select: {
-              displayName: true,
-              username: true,
-              img: true,
-            },
-          },
-          _count: {
-            select: {
-              likes: true,
-              rePosts: true,
-              comments: true,
-            },
-          },
-          likes: {
-            where: {
-              userId: userId,
-            },
-            select: {
-              id: true,
-            },
-          },
-          rePosts: {
-            where: {
-              userId: userId,
-            },
-            select: {
-              id: true,
-            },
-          },
-          saves: {
-            where: {
-              userId: userId,
-            },
-            select: {
-              id: true,
-            },
-          },
-        },
+        include: postIncludeQuery,
       },
-      _count: {
-        select: {
-          likes: true,
-          rePosts: true,
-          comments: true,
-        },
-      },
-      likes: {
-        where: {
-          userId: userId,
-        },
-        select: {
-          id: true,
-        },
-      },
-      rePosts: {
-        where: {
-          userId: userId,
-        },
-        select: {
-          id: true,
-        },
-      },
-      saves: {
-        where: {
-          userId: userId,
-        },
-        select: {
-          id: true,
-        },
-      },
+      ...postIncludeQuery,
     },
     take: 3,
     skip: 0,

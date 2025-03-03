@@ -5,33 +5,13 @@ import PostMore from "./PostMore";
 import { Post as PostType } from "@prisma/client";
 import { format } from "timeago.js";
 
-type PostWithDetails = PostType & {
-  user: {
-    displayName: string | null;
-    username: string;
-    img: string | null;
-  };
-  rePost?: PostType & {
-    user: {
-      displayName: string | null;
-      username: string;
-      img: string | null;
-    };
-    _count: {
-      likes: number;
-      rePosts: number;
-      comments: number;
-    };
-    likes: {
-      id: number;
-    }[];
-    rePosts: {
-      id: number;
-    }[];
-    saves: {
-      id: number;
-    }[];
-  };
+type UserType = {
+  displayName: string | null;
+  username: string;
+  img: string | null;
+};
+
+type InteractionsType = {
   _count: {
     likes: number;
     rePosts: number;
@@ -47,6 +27,12 @@ type PostWithDetails = PostType & {
     id: number;
   }[];
 };
+
+type PostWithDetails = PostType &
+  InteractionsType & {
+    user: UserType;
+    rePost?: (PostType & InteractionsType & { user: UserType }) | null;
+  };
 
 const Post = ({
   type,

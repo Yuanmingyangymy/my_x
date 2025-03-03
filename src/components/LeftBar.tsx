@@ -1,6 +1,8 @@
 import Link from "next/link";
 import React from "react";
 import Image from "./Image";
+import Socket from "./Socket";
+import Notification from "./Notification";
 
 const menuInfo = [
   {
@@ -17,13 +19,13 @@ const menuInfo = [
     icon: "icons/explore.svg",
     link: "/",
   },
-  {
-    // 自己帖子的赞和评论，其他用户@自己的通知
-    id: 3,
-    name: "通知",
-    icon: "icons/notification.svg",
-    link: "/",
-  },
+  // {
+  //   // 自己帖子的赞和评论，其他用户@自己的通知
+  //   id: 3,
+  //   name: "通知",
+  //   icon: "icons/notification.svg",
+  //   link: "/",
+  // },
   {
     // 私信功能
     id: 4,
@@ -67,15 +69,21 @@ export default function LeftBar() {
         </Link>
         {/* Menu */}
         <div className="flex flex-col gap-4">
-          {menuInfo.map((item) => (
-            <Link
-              href={item.link}
-              key={item.icon}
-              className="flex gap-4 items-center p-2 rounded-full hover:bg-[#181818]"
-            >
-              <Image path={item.icon} alt={item.name} w={24} h={24} />
-              <span className="hidden xxl:inline text-2xl">{item.name}</span>
-            </Link>
+          {menuInfo.map((item, index) => (
+            <div key={item.id || index}>
+              {index === 2 && (
+                <div>
+                  <Notification />
+                </div>
+              )}
+              <Link
+                href={item.link}
+                className="flex gap-4 items-center p-2 rounded-full hover:bg-[#181818]"
+              >
+                <Image path={item.icon} alt={item.name} w={24} h={24} />
+                <span className="hidden xxl:inline text-2xl">{item.name}</span>
+              </Link>
+            </div>
           ))}
         </div>
         {/* Post */}
@@ -92,6 +100,7 @@ export default function LeftBar() {
           发帖
         </Link>
       </div>
+      <Socket />
       {/* 用户信息 */}
       <Link
         href="/"
