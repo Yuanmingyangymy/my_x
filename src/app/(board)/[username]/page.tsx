@@ -5,7 +5,6 @@ import { prisma } from "@/prisma";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { followUser } from "../../../action";
 
 const UserPage = async ({
   params,

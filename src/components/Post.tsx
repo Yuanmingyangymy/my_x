@@ -1,9 +1,14 @@
+"use client";
 import Image from "./Image";
 import PostInteractions from "./PostInteractions";
 import Link from "next/link";
-import PostMore from "./PostMore";
 import { Post as PostType } from "@prisma/client";
-import { format } from "timeago.js";
+import { format, register } from "timeago.js";
+import zh_CN from "timeago.js/lib/lang/zh_CN";
+import Video from "./Video";
+import { useUser } from "@clerk/nextjs";
+import { delPost } from "@/action";
+import { useState } from "react";
 
 type UserType = {
   displayName: string | null;
@@ -34,6 +39,8 @@ type PostWithDetails = PostType &
     rePost?: (PostType & InteractionsType & { user: UserType }) | null;
   };
 
+register("zh_CN", zh_CN);
+
 const Post = ({
   type,
   post,
@@ -41,11 +48,27 @@ const Post = ({
   type?: "status" | "comment";
   post: PostWithDetails;
 }) => {
+  const { user } = useUser();
   const originalPost = post.rePost || post;
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const deletePost = async (postId: number) => {
+    const confirmed = window.confirm("确定要删除这条帖子吗？");
+    if (confirmed) {
+      try {
+        await delPost(postId);
+        setIsDeleted(true); // 标记帖子为已删除
+      } catch (error) {
+        console.error("删除失败:", error);
+      }
+    }
+  };
+
+  if (isDeleted) return null; // 如果帖子已删除，返回 null 不渲染
 
   return (
     <div className="p-4 border-y-[1px] border-borderGray">
-      {/* POST TYPE */}
+      {/* 帖子类型 */}
       {post.rePostId && (
         <div className="flex items-center gap-2 text-sm text-textGray mb-2 from-bold">
           <svg
@@ -59,7 +82,7 @@ const Post = ({
               d="M4.75 3.79l4.603 4.3-1.706 1.82L6 8.38v7.37c0 .97.784 1.75 1.75 1.75H13V20H7.75c-2.347 0-4.25-1.9-4.25-4.25V8.38L1.853 9.91.147 8.09l4.603-4.3zm11.5 2.71H11V4h5.25c2.347 0 4.25 1.9 4.25 4.25v7.37l1.647-1.53 1.706 1.82-4.603 4.3-4.603-4.3 1.706-1.82L18 15.62V8.25c0-.97-.784-1.75-1.75-1.75z"
             />
           </svg>
-          <span>{post.user.displayName} reposted</span>
+          <span>{post.user.displayName} 转发</span>
         </div>
       )}
 
@@ -79,9 +102,8 @@ const Post = ({
             tr={true}
           />
         </div>
-        {/* CONTENT */}
+        {/* 内容模块 */}
         <div className="flex-1 flex flex-col gap-2">
-          {/* TOP */}
           <div className="w-full flex justify-between">
             <Link
               href={`/${originalPost.user.username}`}
@@ -111,21 +133,24 @@ const Post = ({
                 <h1 className="text-md font-bold">
                   {originalPost.user.displayName}
                 </h1>
-                <span
-                  className={`text-textGray ${type === "status" && "text-sm"}`}
-                >
-                  @{originalPost.user.username}
-                </span>
                 {type !== "status" && (
                   <span className="text-textGray">
-                    {format(originalPost.createdAt)}
+                    {format(originalPost.createdAt, "zh_CN")}
                   </span>
                 )}
               </div>
             </Link>
-            <PostMore />
+            {/* 如果是当前用户的帖子，显示删除按钮 */}
+            {user?.id === originalPost.userId && (
+              <button
+                onClick={() => deletePost(originalPost.id)}
+                className="text-red-500 hover:text-red-600"
+              >
+                删除
+              </button>
+            )}
           </div>
-          {/* TEXT & MEDIA */}
+          {/* 内容信息 */}
           <Link
             href={`/${originalPost.user.username}/status/${originalPost.id}`}
           >
@@ -141,9 +166,19 @@ const Post = ({
               h={originalPost.imgHeight || 600}
             />
           )}
+          {originalPost.video && (
+            <div className="rounded-lg overflow-hidden">
+              <Video
+                path={originalPost.video}
+                className={originalPost.isSensitive ? "blur-3xl" : ""}
+              />
+            </div>
+          )}
 
           {type === "status" && (
-            <span className="text-textGray">8:41 PM · Dec 5, 2024</span>
+            <span className="text-textGray">
+              {format(originalPost.createdAt, "zh_CN")}
+            </span>
           )}
           <PostInteractions
             username={originalPost.user.username}

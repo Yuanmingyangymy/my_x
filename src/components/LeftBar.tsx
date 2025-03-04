@@ -1,8 +1,10 @@
+"use client";
 import Link from "next/link";
 import React from "react";
 import Image from "./Image";
 import Socket from "./Socket";
 import Notification from "./Notification";
+import { useUser } from "@clerk/nextjs";
 
 const menuInfo = [
   {
@@ -45,7 +47,7 @@ const menuInfo = [
     id: 6,
     name: "我的",
     icon: "icons/profile.svg",
-    link: "/",
+    link: "/${}",
   },
   // {
   //   name: "Communities",
@@ -59,6 +61,7 @@ const menuInfo = [
   // },
 ];
 export default function LeftBar() {
+  const { user } = useUser();
   return (
     <div className="flex flex-col justify-between h-screen sticky top-0 pt-2 pb-8">
       {/* LOGO & Menu */}
@@ -77,8 +80,8 @@ export default function LeftBar() {
                 </div>
               )}
               <Link
-                href={item.link}
-                className="flex gap-4 items-center p-2 rounded-full hover:bg-[#181818]"
+                href={item.id === 6 ? `/${user?.username}` : item.link}
+                className="flex gap-4 items-center py-2 px-6 rounded-full hover:bg-[#181818]"
               >
                 <Image path={item.icon} alt={item.name} w={24} h={24} />
                 <span className="hidden xxl:inline text-2xl">{item.name}</span>
@@ -86,30 +89,17 @@ export default function LeftBar() {
             </div>
           ))}
         </div>
-        {/* Post */}
-        <Link
-          href="/compose/post"
-          className="bg-white rounded-full xxl:hidden w-12 h-12 flex items-center justify-center"
-        >
-          <Image path="icons/post.svg" alt="new post" w={24} h={24} />
-        </Link>
-        <Link
-          href="/compose/post"
-          className="bg-white rounded-full text-black py-2 px-20 font-bold hidden xxl:block"
-        >
-          发帖
-        </Link>
       </div>
       <Socket />
       {/* 用户信息 */}
       <Link
-        href="/"
+        href={`/${user?.username}`}
         className="flex justify-between items-center hover:bg-[#181818] p-2 rounded-full"
       >
         <div className="flex gap-2 items-center">
           <div>
             <Image
-              path="/general/avatar.png"
+              path="/general/default.png"
               w={40}
               h={40}
               alt="avatar"
@@ -118,12 +108,14 @@ export default function LeftBar() {
           </div>
           <div className="hidden xxl:flex flex-col">
             <span className="text-white font-bold truncate w-32">
-              mingyang Yuan
+              {user?.username}
             </span>
-            <span className="text-textGray truncate w-32">@yuanmingyang</span>
+            <span className="text-textGray truncate w-32">
+              @{user?.username}
+            </span>
           </div>
         </div>
-        <div className="hidden xxl:block font-bold">...</div>
+        {/* <div className="hidden xxl:block font-bold">...</div> */}
       </Link>
     </div>
   );

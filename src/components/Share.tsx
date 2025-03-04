@@ -38,7 +38,11 @@ export default function Share() {
     }
   }, [state]);
   return (
-    <form ref={formRef} className="flex gap-4 p-4" action={formAction}>
+    <form
+      ref={formRef}
+      className="flex gap-4 p-4 border-t-[1px] border-borderGray"
+      action={formAction}
+    >
       {/* 头像 */}
       <div className="relative w-10 h-10 rounded-full overflow-hidden">
         <Image src={user?.imageUrl} alt="avatar" w={100} h={100} tr={true} />
@@ -134,41 +138,6 @@ export default function Share() {
                 className="cursor-pointer"
               />
             </label>
-            <Image
-              path="icons/gif.svg"
-              alt="gif"
-              w={20}
-              h={20}
-              className="cursor-pointer"
-            />
-            <Image
-              path="icons/poll.svg"
-              alt="poll"
-              w={20}
-              h={20}
-              className="cursor-pointer"
-            />
-            <Image
-              path="icons/emoji.svg"
-              alt="emoji"
-              w={20}
-              h={20}
-              className="cursor-pointer"
-            />
-            <Image
-              path="icons/schedule.svg"
-              alt="schedule"
-              w={20}
-              h={20}
-              className="cursor-pointer"
-            />
-            <Image
-              path="icons/location.svg"
-              alt="location"
-              w={20}
-              h={20}
-              className="cursor-pointer"
-            />
           </div>
           <button
             className="bg-white text-black font-bold rounded-full py-2 px-4 disabled:cursor-not-allowed"

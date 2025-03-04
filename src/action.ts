@@ -57,6 +57,20 @@ export const likePost = async (postId: number) => {
   }
 };
 
+export const delPost = async (postId: number) => {
+  const { userId } = await auth();
+  if (!userId) return;
+  const existingRePost = await prisma.post.findFirst({
+    where: {
+      id: postId,
+    },
+  });
+  if (existingRePost) {
+    await prisma.post.delete({
+      where: { id: existingRePost.id },
+    });
+  }
+};
 export const rePost = async (postId: number) => {
   const { userId } = await auth();
 

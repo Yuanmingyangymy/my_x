@@ -55,7 +55,7 @@ function Notification() {
   return (
     <div className="relative">
       <div
-        className="flex gap-4 items-center p-2 rounded-full cursor-pointer hover:bg-[#181818]"
+        className="flex gap-4 items-center py-2 px-6 mb-4 rounded-full cursor-pointer hover:bg-[#181818]"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <div className="relative">

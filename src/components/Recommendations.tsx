@@ -48,14 +48,10 @@ const Recommendations = async () => {
           </div>
           {/* 关注... */}
           <button className="py-1 px-4 font-semibold bg-white text-black rounded-full">
-            Follow
+            关注
           </button>
         </div>
       ))}
-
-      <Link href="/" className="text-iconBlue">
-        更多
-      </Link>
     </div>
   );
 };
