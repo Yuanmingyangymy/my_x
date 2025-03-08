@@ -30,6 +30,10 @@ model User {
 
   followers  Follow[] @relation("UserFollowers")
   followings Follow[] @relation("UserFollowings")
+
+  // 添加聊天关系
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
 }
 
 model Post {
@@ -93,4 +97,21 @@ model Follow {
 
   follower  User @relation("UserFollowers", fields: [followerId], references: [id])
   following User @relation("UserFollowings", fields: [followingId], references: [id])
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  content    String
+  type       String   @default("text") // text, image, video, emoji
+  senderId   String
+  receiverId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // 关系
+  sender   User @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  @@index([senderId])
+  @@index([receiverId])
 }

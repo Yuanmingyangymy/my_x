@@ -58,6 +58,12 @@ app.prepare().then(() => {
       }
     })
 
+    // 添加消息处理
+    socket.on('sendMessage', (message) => {
+      // 这里可以添加消息存储逻辑（如果需要持久化）
+      socket.to(message.receiver).emit('newMessage', message)
+    })
+
   });
 
   httpServer
