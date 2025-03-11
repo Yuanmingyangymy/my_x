@@ -56,7 +56,7 @@ const Search = () => {
               >
                 <div className="w-8 h-8 rounded-full overflow-hidden">
                   <Image
-                    path={user.img || "general/default.png"}
+                    src={user.img || "general/default.png"}
                     alt={user.username}
                     w={32}
                     h={32}

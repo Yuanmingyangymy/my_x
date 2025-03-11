@@ -8,12 +8,10 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 // import { imagekit } from "@/utils";
-import { UploadResponse } from "imagekit/dist/libs/interfaces";
-
 type Message = {
   id: string;
-  senderId: string;
-  receiverId: string;
+  senderUsername: string;
+  receiverUsername: string;
   content: string;
   type: "text" | "image" | "video" | "emoji";
   timestamp: Date;
@@ -21,7 +19,10 @@ type Message = {
 
 const ChatPage = () => {
   const { user } = useUser();
-  const { username } = useParams();
+  const { username: usernameParam } = useParams();
+  const username = Array.isArray(usernameParam)
+    ? usernameParam[0]
+    : usernameParam;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -35,10 +36,9 @@ const ChatPage = () => {
     const loadMessages = async () => {
       try {
         const res = await fetch(
-          `/api/messages?userId=${user.id}&targetUser=${username}`
+          `/api/messages?senderUsername=${user?.username}&receiverUsername=${username}`
         );
         const data = await res.json();
-        // 将timestamp字符串转换为Date对象
         setMessages(
           data.messages.map((msg: { timestamp: string | number | Date }) => ({
             ...msg,
@@ -59,10 +59,12 @@ const ChatPage = () => {
   useEffect(() => {
     if (!user || !username) return;
 
-    socket.on("newMessage", (message: Message) => {
+    const handleNewMessage = async (message: Message) => {
       if (
-        (message.senderId === username && message.receiverId === user.id) ||
-        (message.receiverId === username && message.senderId === user.id)
+        (message.senderUsername === user?.username &&
+          message.receiverUsername === username) ||
+        (message.receiverUsername === user?.username &&
+          message.senderUsername === username)
       ) {
         setMessages((prev) => [
           ...prev,
@@ -72,10 +74,12 @@ const ChatPage = () => {
           },
         ]);
       }
-    });
+    };
+
+    socket.on("newMessage", handleNewMessage);
 
     return () => {
-      socket.off("newMessage");
+      socket.off("newMessage", handleNewMessage);
     };
   }, [user, username]);
 
@@ -105,21 +109,20 @@ const ChatPage = () => {
   };
 
   const handleSendMessage = async () => {
-    if (!input.trim() || !username || !user) return;
+    if (!input.trim() || !username || !user?.username) return;
 
     const message: Message = {
       id: uuidv4(),
-      senderId: user.id,
-      receiverId: username as string,
+      senderUsername: user.username,
+      receiverUsername: username,
       content: input,
       type: "text",
       timestamp: new Date(),
     };
-
-    await saveMessageToDB(message);
-    socket.emit("sendMessage", message);
     setMessages((prev) => [...prev, message]);
     setInput("");
+    await saveMessageToDB(message);
+    socket.emit("sendMessage", message);
   };
 
   // const handleFileUpload = async (
@@ -164,12 +167,12 @@ const ChatPage = () => {
   // };
 
   const handleEmojiSelect = async (emoji: EmojiClickData) => {
-    if (!username || !user) return;
+    if (!username || !user?.username) return;
 
     const message: Message = {
       id: uuidv4(),
-      senderId: user.id,
-      receiverId: username as string,
+      senderUsername: user.username,
+      receiverUsername: username,
       content: emoji.emoji,
       type: "emoji",
       timestamp: new Date(),
@@ -190,7 +193,7 @@ const ChatPage = () => {
   return (
     <div className="flex h-screen">
       <div className="flex-1 flex flex-col">
-        <div className="p-4 flex">
+        <div className="p-4 flex border-b border-textGray">
           <Link href="/chat" className="text-iconBlue text-lg mr-2">
             &lt;返回列表
           </Link>
@@ -201,18 +204,22 @@ const ChatPage = () => {
             <div
               key={msg.id}
               className={`flex items-end gap-2 ${
-                msg.senderId === user?.id ? "justify-end" : "justify-start"
+                msg.senderUsername === user?.username
+                  ? "justify-end"
+                  : "justify-start"
               } mb-4`}
             >
               <div
                 className={`max-w-[70%] p-3 rounded-lg ${
-                  msg.senderId === user?.id ? "bg-iconBlue" : "bg-inputGray"
+                  msg.senderUsername === user?.username
+                    ? "bg-iconBlue"
+                    : "bg-inputGray"
                 }`}
               >
                 {msg.type === "text" && <p>{msg.content}</p>}
                 {msg.type === "image" && (
                   <Image
-                    src={msg.content}
+                    path={msg.content}
                     alt="chat image"
                     className="max-w-full h-auto rounded"
                   />

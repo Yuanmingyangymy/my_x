@@ -1,9 +1,9 @@
 "use client";
-import { Post as PostType } from "@prisma/client";
+import { Post as PostType, User } from "@prisma/client";
 import Image from "./Image";
 import Post from "./Post";
 import { useUser } from "@clerk/nextjs";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { addComment } from "@/action";
 import { socket } from "@/socket";
 
@@ -25,10 +25,30 @@ const Comments = ({
   username: string;
 }) => {
   const { isSignedIn, isLoaded, user } = useUser();
+  const [userInfo, setUserInfo] = useState<User>();
+
   const [state, formAction, isPending] = useActionState(addComment, {
     success: false,
     error: false,
   });
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (user?.id) {
+        try {
+          const res = await fetch(`/api/user?userId=${user.id}`);
+          const data = await res.json();
+          console.log("😀", data);
+
+          setUserInfo(data);
+        } catch (error) {
+          console.error("获取用户信息失败:", error);
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [user]);
 
   useEffect(() => {
     if (state.success) {
@@ -51,7 +71,7 @@ const Comments = ({
         >
           <div className="relative w-10 h-10 rounded-full overflow-hidden">
             <Image
-              src={user.imageUrl}
+              src={userInfo?.img || "general/default.png"}
               alt="Lama Dev"
               w={100}
               h={100}

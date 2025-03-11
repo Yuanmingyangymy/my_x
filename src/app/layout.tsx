@@ -1,6 +1,7 @@
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import QueryProvider from "../providers/QueryProvider";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -11,7 +12,10 @@ export default function RootLayout({
     <ClerkProvider>
       <QueryProvider>
         <html lang="en">
-          <body>{children}</body>
+          <body>
+            {children}
+            <Toaster />
+          </body>
         </html>
       </QueryProvider>
     </ClerkProvider>

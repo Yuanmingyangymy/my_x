@@ -1,12 +1,43 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { prisma } from "./prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { UploadResponse } from "imagekit/dist/libs/interfaces";
 import { imagekit } from "./utils";
 
+// 同步用户信息到数据库
+export async function syncUser() {
+  try {
+    const { userId } = await auth();
+    const user = await currentUser();
+
+    if (!userId || !user) return;
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (existingUser) return existingUser;
+
+    const dbUser = await prisma.user.create({
+      data: {
+        id: userId,
+        displayName: `${user.firstName || ""} ${user.lastName || ""}`,
+        username:
+          user.username ?? user.emailAddresses[0].emailAddress.split("@")[0],
+        email: user.emailAddresses[0].emailAddress,
+        img: user.imageUrl,
+      },
+    });
+
+    return dbUser;
+  } catch (error) {
+    console.log("Error in syncUser", error);
+  }
+}
 export const followUser = async (targetUserId: string) => {
   const { userId } = await auth();
 
@@ -229,14 +260,6 @@ export const addPost = async (
       video = result.filePath;
     }
   }
-
-  console.log({
-    ...validatedFields.data,
-    userId,
-    img,
-    imgHeight,
-    video,
-  });
 
   try {
     await prisma.post.create({

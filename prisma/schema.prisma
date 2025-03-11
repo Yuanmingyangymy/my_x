@@ -100,18 +100,30 @@ model Follow {
 }
 
 model Message {
-  id         String   @id @default(cuid())
-  content    String
-  type       String   @default("text") // text, image, video, emoji
-  senderId   String
-  receiverId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id               String   @id @default(cuid())
+  content          String
+  type             String   @default("text") // text, image, video, emoji
+  senderUsername   String
+  receiverUsername String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   // 关系
-  sender   User @relation("SentMessages", fields: [senderId], references: [id])
-  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  sender   User @relation("SentMessages", fields: [senderUsername], references: [username])
+  receiver User @relation("ReceivedMessages", fields: [receiverUsername], references: [username])
 
-  @@index([senderId])
-  @@index([receiverId])
+  @@index([senderUsername])
+  @@index([receiverUsername])
+}
+
+model Notification {
+  id             String   @id @default(cuid())
+  userId         String
+  senderUsername String
+  type           String
+  link           String
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
 }

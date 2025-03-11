@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { prisma } from "@/prisma";
 import Image from "@/components/Image";
 import Link from "next/link";
 
@@ -44,18 +43,18 @@ const ChatPage = () => {
   return (
     <div className="flex h-screen">
       {/* 左侧好友列表 */}
-      <div className="w-1/3 border-r border-borderGray p-4">
+      <div className="w-full border-r border-borderGray p-4">
         <h2 className="text-lg font-bold mb-4">好友</h2>
         <div className="space-y-2">
           {friends.map((friend) => (
             <Link
               key={friend.id}
               href={`/chat/${friend.username}`}
-              className="flex items-center gap-3 p-2 hover:bg-inputGray rounded-lg"
+              className="flex items-center gap-3 p-2 hover:bg-inputGray rounded-lg bg-gray-800"
             >
               <div className="w-10 h-10 rounded-full overflow-hidden">
                 <Image
-                  path={friend.img || "general/default.png"}
+                  src={friend.img || "general/default.png"}
                   alt={friend.username}
                   w={40}
                   h={40}
@@ -80,7 +79,7 @@ const ChatPage = () => {
             >
               <div className="w-10 h-10 rounded-full overflow-hidden">
                 <Image
-                  path={user.img || "general/default.png"}
+                  src={user.img || "general/default.png"}
                   alt={user.username}
                   w={40}
                   h={40}
@@ -97,9 +96,9 @@ const ChatPage = () => {
         </div>
       </div>
       {/* 右侧占位内容 */}
-      <div className="flex-1 flex items-center justify-center">
+      {/* <div className="flex-1 flex items-center justify-center">
         <p className="text-textGray">和一个朋友聊天吧~</p>
-      </div>
+      </div> */}
     </div>
   );
 };

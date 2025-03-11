@@ -6,9 +6,9 @@ import { Post as PostType } from "@prisma/client";
 import { format, register } from "timeago.js";
 import zh_CN from "timeago.js/lib/lang/zh_CN";
 import Video from "./Video";
-import { useUser } from "@clerk/nextjs";
 import { delPost } from "@/action";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 type UserType = {
   displayName: string | null;
@@ -46,18 +46,54 @@ const Post = ({
   post,
 }: {
   type?: "status" | "comment";
-  post: PostWithDetails;
+  post: PostWithDetails & { isCurrentUser: boolean };
 }) => {
-  const { user } = useUser();
   const originalPost = post.rePost || post;
-  const [showConfirm, setShowConfirm] = useState(false);
+
   const [isDeleted, setIsDeleted] = useState(false);
+
   const deletePost = async (postId: number) => {
-    const confirmed = window.confirm("确定要删除这条帖子吗？");
+    const confirmed = await new Promise((resolve) => {
+      toast(
+        (t) => (
+          <div className="flex flex-col gap-2">
+            <p>确定要删除这条帖子吗？</p>
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  resolve(false);
+                }}
+                className="px-2 py-1 text-sm"
+              >
+                取消
+              </button>
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  resolve(true);
+                }}
+                className="px-2 py-1 text-sm text-red-500"
+              >
+                确认删除
+              </button>
+            </div>
+          </div>
+        ),
+        {
+          duration: Infinity,
+        }
+      );
+    });
+
     if (confirmed) {
       try {
-        await delPost(postId);
-        setIsDeleted(true); // 标记帖子为已删除
+        await toast.promise(delPost(postId), {
+          loading: "删除中...",
+          success: "帖子已删除",
+          error: "删除失败",
+        });
+        setIsDeleted(true);
       } catch (error) {
         console.error("删除失败:", error);
       }
@@ -95,7 +131,7 @@ const Post = ({
           } relative w-10 h-10 rounded-full overflow-hidden`}
         >
           <Image
-            path={originalPost.user.img || "general/default.png"}
+            src={originalPost.user.img || "general/default.png"}
             alt=""
             w={100}
             h={100}
@@ -116,7 +152,7 @@ const Post = ({
                   } relative w-10 h-10 rounded-full overflow-hidden`}
                 >
                   <Image
-                    path={originalPost.user.img || "general/default.png"}
+                    src={originalPost.user.img || "general/default.png"}
                     alt=""
                     w={100}
                     h={100}
@@ -131,7 +167,7 @@ const Post = ({
                 }`}
               >
                 <h1 className="text-md font-bold">
-                  {originalPost.user.displayName}
+                  {originalPost.user.username}
                 </h1>
                 {type !== "status" && (
                   <span className="text-textGray">
@@ -141,7 +177,7 @@ const Post = ({
               </div>
             </Link>
             {/* 如果是当前用户的帖子，显示删除按钮 */}
-            {user?.id === originalPost.userId && (
+            {post.isCurrentUser && (
               <button
                 onClick={() => deletePost(originalPost.id)}
                 className="text-red-500 hover:text-red-600"

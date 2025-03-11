@@ -4,17 +4,17 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const userId = searchParams.get("userId");
-  const targetUser = searchParams.get("targetUser");
+  const senderUsername = searchParams.get("senderUsername");
+  const receiverUsername = searchParams.get("receiverUsername");
 
-  if (!userId || !targetUser) {
+  if (!senderUsername || !receiverUsername) {
     return Response.json({ messages: [] });
   }
   const messages = await prisma.message.findMany({
     where: {
       OR: [
-        { senderId: userId, receiverId: targetUser },
-        { senderId: targetUser, receiverId: userId },
+        { senderUsername, receiverUsername },
+        { senderUsername: receiverUsername, receiverUsername: senderUsername },
       ],
     },
     orderBy: {
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     messages: messages.map((msg) => ({
       ...msg,
-      timestamp: msg.createdAt.toISOString(), // 将Date转换为ISO字符串
+      timestamp: msg.createdAt.toISOString(),
     })),
   });
 }
@@ -37,8 +37,8 @@ export async function POST(request: Request) {
     const createdMessage = await prisma.message.create({
       data: {
         id: message.id,
-        senderId: message.senderId,
-        receiverId: message.receiverId,
+        senderUsername: message.senderUsername,
+        receiverUsername: message.receiverUsername,
         content: message.content,
         type: message.type,
         createdAt: message.timestamp,

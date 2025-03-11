@@ -1,13 +1,15 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "./Image";
 import Socket from "./Socket";
 import Notification from "./Notification";
 import { useUser } from "@clerk/nextjs";
+import { User } from "@prisma/client";
 
 export default function LeftBar() {
   const { user } = useUser();
+  const [userInfo, setUserInfo] = useState<User>();
   const menuInfo = [
     {
       // 自己以及关注的人的动态
@@ -16,13 +18,13 @@ export default function LeftBar() {
       icon: "icons/home.svg",
       link: "/",
     },
-    {
-      // 使用用户的动态（时间排序）
-      id: 2,
-      name: "探索",
-      icon: "icons/explore.svg",
-      link: "/",
-    },
+    // {
+    //   // 使用用户的动态（时间排序）
+    //   id: 2,
+    //   name: "探索",
+    //   icon: "icons/explore.svg",
+    //   link: "/",
+    // },
     // {
     //   // 自己帖子的赞和评论，其他用户@自己的通知
     //   id: 3,
@@ -62,6 +64,24 @@ export default function LeftBar() {
     //   link: "/",
     // },
   ];
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (user?.id) {
+        try {
+          const res = await fetch(`/api/user?userId=${user.id}`);
+          const data = await res.json();
+          console.log("😀", data);
+
+          setUserInfo(data);
+        } catch (error) {
+          console.error("获取用户信息失败:", error);
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [user]);
+
   return (
     <div className="flex flex-col justify-between h-screen sticky top-0 pt-2 pb-8">
       {/* LOGO & Menu */}
@@ -108,14 +128,13 @@ export default function LeftBar() {
           </div>
           <div className="hidden xxl:flex flex-col">
             <span className="text-white font-bold truncate w-32">
-              {user?.username}
+              {userInfo?.username}
             </span>
             <span className="text-textGray truncate w-32">
-              @{user?.username}
+              {userInfo?.email}
             </span>
           </div>
         </div>
-        {/* <div className="hidden xxl:block font-bold">...</div> */}
       </Link>
     </div>
   );

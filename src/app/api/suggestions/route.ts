@@ -9,19 +9,16 @@ export async function GET(request: NextRequest) {
     return Response.json([]);
   }
 
-  // 获取好友的好友
-  const friendsOfFriends = await prisma.$queryRaw`
-    SELECT DISTINCT u.id, u.username, u.displayName, u.img
-    FROM Follow f1
-    JOIN Follow f2 ON f1.followingId = f2.followerId
-    JOIN User u ON f2.followingId = u.id
-    WHERE f1.followerId = ${userId}
-    AND f2.followingId != ${userId}
-    AND f2.followingId NOT IN (
+  // 获取除了用户自身及其关注者之外的其他用户
+  const suggestions = await prisma.$queryRaw`
+    SELECT u.id, u.username, u.displayName, u.img
+    FROM User u
+    WHERE u.id != ${userId}
+    AND u.id NOT IN (
       SELECT followingId FROM Follow WHERE followerId = ${userId}
     )
-    LIMIT 10
+    ORDER BY RAND()
+    LIMIT 3
   `;
-
-  return Response.json(friendsOfFriends);
+  return Response.json(suggestions);
 }

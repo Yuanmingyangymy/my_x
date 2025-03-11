@@ -34,7 +34,9 @@ const UserPage = async ({
         : undefined,
     },
   });
+
   if (!user) return notFound();
+  const isCurrentUser = userId === user.id;
   return (
     <div className="">
       {/* PROFILE TITLE */}
@@ -42,7 +44,6 @@ const UserPage = async ({
         <Link href="/">
           <Image path="icons/back.svg" alt="back" w={24} h={24} />
         </Link>
-        <h1 className="font-bold text-lg">{user.displayName}</h1>
       </div>
       {/* 个人信息 */}
       <div className="">
@@ -60,7 +61,7 @@ const UserPage = async ({
           {/* 头像 */}
           <div className="w-1/5 aspect-square rounded-full overflow-hidden border-4 border-black bg-gray-300 absolute left-4 -translate-y-1/2">
             <Image
-              path={user.img || "general/default.png"}
+              src={user.img || "general/default.png"}
               alt=""
               w={100}
               h={100}
@@ -72,13 +73,15 @@ const UserPage = async ({
           <div className="w-9 h-9 flex items-center justify-center rounded-full border-[1px] border-gray-500 cursor-pointer">
             <Image path="icons/more.svg" alt="more" w={20} h={20} />
           </div>
-          <div className="w-9 h-9 flex items-center justify-center rounded-full border-[1px] border-gray-500 cursor-pointer">
-            <Image path="icons/explore.svg" alt="more" w={20} h={20} />
-          </div>
-          <div className="w-9 h-9 flex items-center justify-center rounded-full border-[1px] border-gray-500 cursor-pointer">
-            <Image path="icons/message.svg" alt="more" w={20} h={20} />
-          </div>
-          {userId && (
+          {!isCurrentUser && (
+            <Link
+              href={`/chat/${user.username}`}
+              className="w-9 h-9 flex items-center justify-center rounded-full border-[1px] border-gray-500 cursor-pointer"
+            >
+              <Image path="icons/message.svg" alt="chat" w={20} h={20} />
+            </Link>
+          )}
+          {userId && !isCurrentUser && (
             <FollowButton
               isFollowed={!!user.followings.length}
               userId={user.id}
@@ -88,8 +91,8 @@ const UserPage = async ({
         {/* 详细信息 */}
         <div className="p-4 flex flex-col gap-2">
           <div className="">
-            <h1 className="text-2xl font-bold">{user.displayName}</h1>
-            <span className="text-textGray text-sm">@{user.username}</span>
+            <h1 className="text-2xl font-bold">{user.username}</h1>
+            <span className="text-textGray text-sm">{user.email}</span>
           </div>
           {user.bio && <p>{user.bio} Channel</p>}
           {/* 其他信息 */}

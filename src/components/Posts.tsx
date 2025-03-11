@@ -56,9 +56,15 @@ export default async function Posts({
     },
   });
 
+  // 添加isCurrentUser字段（判断是否是当前用户的帖子）
+  const postsWithOwnerStatus = posts.map((post) => ({
+    ...post,
+    isCurrentUser: post.userId === userId,
+  }));
+
   return (
     <div>
-      {posts.map((post) => {
+      {postsWithOwnerStatus.map((post) => {
         return (
           <div key={post.id}>
             <Post post={post} />
