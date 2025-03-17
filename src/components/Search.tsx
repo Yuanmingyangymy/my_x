@@ -52,6 +52,7 @@ const Search = () => {
               <Link
                 key={user.id}
                 href={`/${user.username}`}
+                onClick={() => setQuery("")}
                 className="px-4 py-2 hover:bg-[#181818] cursor-pointer flex items-center gap-3"
               >
                 <div className="w-8 h-8 rounded-full overflow-hidden">

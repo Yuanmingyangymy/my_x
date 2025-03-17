@@ -69,7 +69,7 @@ function Notification() {
         <span className="hidden xxl:inline text-2xl">通知</span>
       </div>
       {isOpen && (
-        <div className="absolute -right-full p-4 rounded-lg bg-white text-black flex flex-col gap-4 w-max z-50">
+        <div className="absolute -top-2 -right-full p-4 rounded-lg bg-white text-black flex flex-col gap-4 w-max z-50">
           <h1>通知列表</h1>
           {notifications.map((notification) => (
             <div

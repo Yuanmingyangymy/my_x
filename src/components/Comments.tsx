@@ -71,7 +71,7 @@ const Comments = ({
         >
           <div className="relative w-10 h-10 rounded-full overflow-hidden">
             <Image
-              src={userInfo?.img || "general/default.png"}
+              path={userInfo?.img || "general/default.png"}
               alt="Lama Dev"
               w={100}
               h={100}

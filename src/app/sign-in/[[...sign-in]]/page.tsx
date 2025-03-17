@@ -9,14 +9,59 @@ const SignInPage = () => {
     <div className="h-screen flex items-center justify-between p-8">
       <div className="hidden lg:flex w-1/2 items-center justify-center">
         <svg
+          width="184"
+          height="180"
+          viewBox="0 0 184 180"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          width="320"
-          height="320"
-          viewBox="0 0 24 24"
         >
+          <line
+            x1="4.00001"
+            y1="1.74846e-07"
+            x2="4"
+            y2="180"
+            stroke="white"
+            strokeWidth="8"
+          />
           <path
-            fill="white"
-            d="M 26.609375 29.023438 L 3.425781 29.023438 L 3.425781 26.707031 L 24.3125 26.707031 L 24.3125 23.242188 L 3.390625 23.242188 L 3.441406 0.015625 L 11.46875 0.015625 L 11.46875 17.117188 L 9.167969 17.117188 L 9.167969 2.335938 L 5.738281 2.335938 L 5.695312 20.925781 L 26.609375 20.925781 L 26.609375 29.023438"
+            d="M112 4L148 4L184 4"
+            stroke="white"
+            strokeWidth="8"
+            strokeDasharray="16 16"
+          />
+          <path
+            d="M112 176L148 176H184"
+            stroke="white"
+            strokeWidth="8"
+            strokeDasharray="16 16"
+          />
+          <path d="M80 176L116 176" stroke="white" strokeWidth="8" />
+          <line
+            x1="180"
+            y1="4"
+            x2="180"
+            y2="176"
+            stroke="white"
+            strokeWidth="8"
+            strokeLinecap="square"
+            strokeDasharray="16 16"
+          />
+          <line
+            x1="116"
+            y1="4"
+            x2="116"
+            y2="176"
+            stroke="white"
+            strokeWidth="8"
+            strokeLinecap="square"
+            strokeDasharray="16 16"
+          />
+          <path d="M115 1L80 179" stroke="white" strokeWidth="8" />
+          <path d="M51 105L51 180" stroke="white" strokeWidth="8" />
+          <path
+            d="M94 107L52 4H9L81 176M3.00002 176H52"
+            stroke="white"
+            strokeWidth="8"
           />
         </svg>
       </div>

@@ -73,13 +73,14 @@ const ChatPage = () => {
         <h2 className="text-lg font-bold mt-6 mb-4">可能认识的人</h2>
         <div className="space-y-2">
           {suggestions.map((user) => (
-            <div
+            <Link
               key={user.id}
-              className="flex items-center gap-3 p-2 hover:bg-inputGray rounded-lg"
+              href={`/chat/${user.username}`}
+              className="flex items-center gap-3 p-2 hover:bg-inputGray rounded-lg bg-gray-800"
             >
               <div className="w-10 h-10 rounded-full overflow-hidden">
                 <Image
-                  src={user.img || "general/default.png"}
+                  path={user.img || "general/default.png"}
                   alt={user.username}
                   w={40}
                   h={40}
@@ -91,7 +92,7 @@ const ChatPage = () => {
                 </p>
                 <p className="text-sm text-textGray">@{user.username}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

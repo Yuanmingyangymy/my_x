@@ -29,7 +29,6 @@ export async function syncUser() {
         username:
           user.username ?? user.emailAddresses[0].emailAddress.split("@")[0],
         email: user.emailAddresses[0].emailAddress,
-        img: user.imageUrl,
       },
     });
 

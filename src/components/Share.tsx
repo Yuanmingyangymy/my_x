@@ -3,7 +3,6 @@ import React, { useActionState, useEffect, useRef, useState } from "react";
 import Image from "./Image";
 import NextImage from "next/image";
 import ImageEditor from "./ImageEditor";
-import { useUser } from "@clerk/nextjs";
 import { addPost } from "@/action";
 
 export default function Share() {
@@ -13,7 +12,6 @@ export default function Share() {
     type: "original" as "original" | "wide" | "square",
     sensitive: false,
   });
-  const { user } = useUser();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
@@ -43,10 +41,6 @@ export default function Share() {
       className="flex gap-4 p-4 border-t-[1px] border-borderGray"
       action={formAction}
     >
-      {/* 头像 */}
-      <div className="relative w-10 h-10 rounded-full overflow-hidden">
-        <Image src={user?.imageUrl} alt="avatar" w={100} h={100} tr={true} />
-      </div>
       {/* 发帖部分 */}
       <div className="flex-1 flex flex-col gap-4">
         <input

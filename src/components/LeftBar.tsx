@@ -88,7 +88,62 @@ export default function LeftBar() {
       <div className="flex flex-col gap-4 items-center text-lg xxl:items-start">
         {/* LOGO */}
         <Link href="/" className="hover:bg-[#181818] p-4 rounded-full">
-          <Image path="icons/logo.svg" alt="logo" w={24} h={24} />
+          <svg
+            width="55"
+            height="54"
+            viewBox="0 0 184 180"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line
+              x1="4.00001"
+              y1="1.74846e-07"
+              x2="4"
+              y2="180"
+              stroke="white"
+              strokeWidth="8"
+            />
+            <path
+              d="M112 4L148 4L184 4"
+              stroke="white"
+              strokeWidth="8"
+              strokeDasharray="16 16"
+            />
+            <path
+              d="M112 176L148 176H184"
+              stroke="white"
+              strokeWidth="8"
+              strokeDasharray="16 16"
+            />
+            <path d="M80 176L116 176" stroke="white" strokeWidth="8" />
+            <line
+              x1="180"
+              y1="4"
+              x2="180"
+              y2="176"
+              stroke="white"
+              strokeWidth="8"
+              strokeLinecap="square"
+              strokeDasharray="16 16"
+            />
+            <line
+              x1="116"
+              y1="4"
+              x2="116"
+              y2="176"
+              stroke="white"
+              strokeWidth="8"
+              strokeLinecap="square"
+              strokeDasharray="16 16"
+            />
+            <path d="M115 1L80 179" stroke="white" strokeWidth="8" />
+            <path d="M51 105L51 180" stroke="white" strokeWidth="8" />
+            <path
+              d="M94 107L52 4H9L81 176M3.00002 176H52"
+              stroke="white"
+              strokeWidth="8"
+            />
+          </svg>
         </Link>
         {/* Menu */}
         <div className="flex flex-col gap-4">
