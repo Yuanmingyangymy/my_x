@@ -51,14 +51,16 @@ const Comments = ({
 
   useEffect(() => {
     if (state.success) {
-      socket.emit("sendNotification", {
-        receiverUsername: username,
-        data: {
-          senderUsername: user?.username,
-          type: "comment",
-          link: `/${username}/status/${postId}`,
-        },
-      });
+      if (user?.username !== username) {
+        socket.emit("sendNotification", {
+          receiverUsername: username,
+          data: {
+            senderUsername: user?.username,
+            type: "comment",
+            link: `/${username}/status/${postId}`,
+          },
+        });
+      }
     }
   }, [state.success, username, postId, user?.username]);
   return (

@@ -44,7 +44,7 @@ const ChatPage = () => {
     <div className="flex h-screen">
       {/* 左侧好友列表 */}
       <div className="w-full border-r border-borderGray p-4">
-        <h2 className="text-lg font-bold mb-4">好友</h2>
+        <h2 className="text-lg font-bold mb-4">关注的人</h2>
         <div className="space-y-2">
           {friends.map((friend) => (
             <Link
@@ -54,7 +54,7 @@ const ChatPage = () => {
             >
               <div className="w-10 h-10 rounded-full overflow-hidden">
                 <Image
-                  src={friend.img || "general/default.png"}
+                  path={friend.img || "general/default.png"}
                   alt={friend.username}
                   w={40}
                   h={40}

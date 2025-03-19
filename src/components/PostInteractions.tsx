@@ -31,7 +31,7 @@ export default function PostInteractions({
 
   const likeAction = async () => {
     if (!user) return;
-    if (!optimisticCount.isLiked) {
+    if (!optimisticCount.isLiked && user.username !== username) {
       socket.emit("sendNotification", {
         receiverUsername: username,
         data: {
