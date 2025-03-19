@@ -4,35 +4,31 @@ import { useEffect, useState } from "react";
 import Image from "./Image";
 import { socket } from "@/socket";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type NotificationType = {
   id: string;
   senderUsername: string;
-  type: "like" | "comment" | "rePost" | "follow";
+  type: "like" | "comment" | "follow";
   link: string;
 };
 
 function Notification() {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isShowingToast, setIsShowingToast] = useState(false); // 新增状态控制
 
   useEffect(() => {
     socket.on("getNotification", (data: NotificationType) => {
-      console.log("data", data);
       setNotifications((prev) => [...prev, data]);
     });
   }, []);
 
   const diffrentType = (type: string) => {
-    console.log("testType", type);
-
     switch (type) {
       case "like":
         return "点赞了你的帖子";
       case "comment":
         return "评论了你的帖子";
-      case "rePost":
-        return "转发了你的帖子";
       case "follow":
         return "关注了你";
       default:
@@ -41,22 +37,57 @@ function Notification() {
   };
 
   const router = useRouter();
-  const reset = () => {
-    setNotifications([]);
-    setIsOpen(false);
-  };
 
   const handleClick = (notification: NotificationType) => {
     const fileredList = notifications.filter((n) => n.id !== notification.id);
     setNotifications(fileredList);
-    setIsOpen(false);
     router.push(notification.link);
   };
+
+  const showNotificationList = () => {
+    if (isShowingToast) return;
+
+    const currentNotifications = [...notifications];
+    setNotifications([]);
+    setIsShowingToast(true);
+
+    if (currentNotifications.length === 0) {
+      toast("暂无新通知", {
+        icon: "💤",
+        duration: 2000,
+      });
+      setTimeout(() => setIsShowingToast(false), 2000);
+      return;
+    }
+
+    toast(
+      <div className="absolute -top-2 -right-full p-4 rounded-lg bg-white text-black flex flex-col gap-4 w-max z-50">
+        {notifications.map((notification) => (
+          <div
+            className="cursor-pointer"
+            key={notification.id}
+            onClick={() => handleClick(notification)}
+          >
+            <b>{notification.senderUsername}</b>{" "}
+            {diffrentType(notification.type)}
+          </div>
+        ))}
+      </div>,
+      {
+        duration: 2000,
+      }
+    );
+    // 通过监听 toast 变化实现关闭回调
+    setTimeout(() => {
+      setIsShowingToast(false);
+    }, 2000);
+  };
+
   return (
     <div className="relative">
       <div
         className="flex gap-4 items-center py-2 px-6 mb-4 rounded-full cursor-pointer hover:bg-[#181818]"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={showNotificationList}
       >
         <div className="relative">
           <Image path={`icons/notification.svg`} alt="" w={24} h={24} />
@@ -68,27 +99,6 @@ function Notification() {
         </div>
         <span className="hidden xxl:inline text-2xl">通知</span>
       </div>
-      {isOpen && (
-        <div className="absolute -top-2 -right-full p-4 rounded-lg bg-white text-black flex flex-col gap-4 w-max z-50">
-          <h1>通知列表</h1>
-          {notifications.map((notification) => (
-            <div
-              className="cursor-pointer"
-              key={notification.id}
-              onClick={() => handleClick(notification)}
-            >
-              <b>{notification.senderUsername}</b>{" "}
-              {diffrentType(notification.type)}
-            </div>
-          ))}
-          <button
-            onClick={reset}
-            className="bg-black text-white p-2 text-sm rounded-lg"
-          >
-            标为已读
-          </button>
-        </div>
-      )}
     </div>
   );
 }

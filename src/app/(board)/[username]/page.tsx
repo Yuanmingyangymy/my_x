@@ -61,7 +61,7 @@ const UserPage = async ({
           {/* 头像 */}
           <div className="w-1/5 aspect-square rounded-full overflow-hidden border-4 border-black bg-gray-300 absolute left-4 -translate-y-1/2">
             <Image
-              src={user.img || "general/default.png"}
+              path={user.img || "general/default.png"}
               alt=""
               w={100}
               h={100}

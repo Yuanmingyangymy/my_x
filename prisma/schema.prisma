@@ -50,10 +50,6 @@ model Post {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  rePostId Int?
-  rePost   Post?  @relation("RePosts", fields: [rePostId], references: [id])
-  rePosts  Post[] @relation("RePosts")
-
   parentPostId Int?
   parentPost   Post?  @relation("PostComments", fields: [parentPostId], references: [id])
   comments     Post[] @relation("PostComments")

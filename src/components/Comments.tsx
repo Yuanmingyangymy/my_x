@@ -9,9 +9,8 @@ import { socket } from "@/socket";
 
 type CommentWithDetails = PostType & {
   user: { displayName: string | null; username: string; img: string | null };
-  _count: { likes: number; rePosts: number; comments: number };
+  _count: { likes: number; comments: number };
   likes: { id: number }[];
-  rePosts: { id: number }[];
   saves: { id: number }[];
 };
 

@@ -46,10 +46,6 @@ app.prepare().then(() => {
     })
     socket.on("sendNotification", ({ receiverUsername, data }) => {
       const receiver = getUser(receiverUsername);
-      console.log("receiver", receiver, receiverUsername);
-      console.log("data", data);
-
-
       if (receiver) {
         io.to(receiver.socketId).emit("getNotification", {
           id: uuidv4(),

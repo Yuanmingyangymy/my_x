@@ -146,7 +146,7 @@ export default function LeftBar() {
           </svg>
         </Link>
         {/* Menu */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 select-none">
           {menuInfo.map((item, index) => (
             <div key={item.id || index}>
               {index === 2 && (
