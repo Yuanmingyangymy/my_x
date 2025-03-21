@@ -44,7 +44,7 @@ export default function LeftBar() {
       id: 5,
       name: "收藏",
       icon: "icons/bookmark.svg",
-      link: "/",
+      link: `/save/${user?.username}`,
     },
     {
       // 个人信息页面（发布的帖子、关注的用户）

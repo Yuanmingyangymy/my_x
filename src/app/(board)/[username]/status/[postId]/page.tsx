@@ -3,6 +3,7 @@ import Image from "@/components/Image";
 import Post from "@/components/Post";
 import { prisma } from "@/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -13,6 +14,8 @@ const StatusPage = async ({
 }) => {
   const { userId } = await auth();
   const postId = (await params).postId;
+  const headerList = headers();
+  const referer = (await headerList).get("referer");
 
   if (!userId) return;
 
@@ -40,12 +43,18 @@ const StatusPage = async ({
   return (
     <div className="">
       <div className="flex items-center gap-8 sticky top-0 backdrop-blur-md p-4 z-10 bg-[#00000084]">
-        <Link href="/">
+        <Link href={referer || "/"}>
           <Image path="icons/back.svg" alt="back" w={24} h={24} />
         </Link>
         <h1 className="font-bold text-lg">Post</h1>
       </div>
-      <Post type="status" post={post} />
+      <Post
+        type="status"
+        post={{
+          ...post,
+          isCurrentUser: true,
+        }}
+      />
       <Comments
         comments={post.comments}
         postId={post.id}
