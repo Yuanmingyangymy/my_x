@@ -31,21 +31,21 @@ const SignUpPage = () => {
               <Clerk.Field name="username" className="flex flex-col gap-2">
                 <Clerk.Input
                   className="py-2 px-6 rounded-full text-black w-72 placeholder:text-sm"
-                  placeholder="Username"
+                  placeholder="用户名"
                 />
                 <Clerk.FieldError className="text-red-300 text-sm" />
               </Clerk.Field>
               <Clerk.Field name="emailAddress" className="flex flex-col gap-2">
                 <Clerk.Input
                   className="py-2 px-6 rounded-full text-black w-72 placeholder:text-sm"
-                  placeholder="E-mail"
+                  placeholder="邮箱"
                 />
                 <Clerk.FieldError className="text-red-300 text-sm" />
               </Clerk.Field>
               <Clerk.Field name="password" className="flex flex-col gap-2">
                 <Clerk.Input
                   className="py-2 px-6 rounded-full text-black w-72 placeholder:text-sm"
-                  placeholder="Password"
+                  placeholder="密码"
                 />
                 <Clerk.FieldError className="text-red-300 text-sm" />
               </Clerk.Field>

@@ -146,21 +146,23 @@ const SignInPage = () => {
             </SignIn.Action>
           </SignIn.Step>
           <SignIn.Step name="reset-password">
-            <h1>重置你的密码</h1>
+            <h1 className="font-bold">重置你的密码</h1>
 
             <Clerk.Field name="password">
               <Clerk.Label>新密码</Clerk.Label>
-              <Clerk.Input />
+              <Clerk.Input className="text-black px-2 ml-2" />
               <Clerk.FieldError />
             </Clerk.Field>
 
             <Clerk.Field name="confirmPassword">
               <Clerk.Label>确认密码</Clerk.Label>
-              <Clerk.Input />
+              <Clerk.Input className="text-black px-2 ml-2" />
               <Clerk.FieldError />
             </Clerk.Field>
 
-            <SignIn.Action submit>重置密码</SignIn.Action>
+            <SignIn.Action submit className="text-iconBlue hover:underline">
+              重置密码
+            </SignIn.Action>
           </SignIn.Step>
           {/* OR SIGN UP */}
           <div className="w-72 flex items-center gap-4">

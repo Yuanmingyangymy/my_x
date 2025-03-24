@@ -2,6 +2,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import QueryProvider from "../providers/QueryProvider";
 import { Toaster } from "react-hot-toast";
+import { zhCN } from "@clerk/localizations";
 
 export default function RootLayout({
   children,
@@ -9,7 +10,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider localization={zhCN}>
       <QueryProvider>
         <html lang="en">
           <body>

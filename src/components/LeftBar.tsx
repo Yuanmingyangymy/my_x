@@ -174,7 +174,7 @@ export default function LeftBar() {
         <div className="flex gap-2 items-center">
           <div>
             <Image
-              path="/general/default.png"
+              path={userInfo?.img || "/general/default.png"}
               w={40}
               h={40}
               alt="avatar"

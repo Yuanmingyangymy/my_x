@@ -1,3 +1,4 @@
+import EditProfile from "@/components/EditProfile";
 import FollowButton from "@/components/FollowButton";
 import Image from "@/components/Image";
 import Posts from "@/components/Posts";
@@ -70,9 +71,7 @@ const UserPage = async ({
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-2 p-2">
-          <div className="w-9 h-9 flex items-center justify-center rounded-full border-[1px] border-gray-500 cursor-pointer">
-            <Image path="icons/more.svg" alt="more" w={20} h={20} />
-          </div>
+          {isCurrentUser && <EditProfile />}
           {!isCurrentUser && (
             <Link
               href={`/chat/${user.username}`}
@@ -94,10 +93,10 @@ const UserPage = async ({
             <h1 className="text-2xl font-bold">{user.username}</h1>
             <span className="text-textGray text-sm">{user.email}</span>
           </div>
-          {user.bio && <p>{user.bio} Channel</p>}
+          {user.bio && <p>{user.bio}</p>}
           {/* 其他信息 */}
           <div className="flex gap-4 text-textGray text-[15px]">
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <Image
                 path="icons/userLocation.svg"
                 alt="location"
@@ -105,15 +104,15 @@ const UserPage = async ({
                 h={20}
               />
               <span>{user.location || "未知"}</span>
-            </div>
+            </div> */}
             <div className="flex items-center gap-2">
               <Image path="icons/date.svg" alt="date" w={20} h={20} />
               <span>
-                Joined{" "}
                 {new Date(user.createdAt.toString()).toLocaleDateString(
-                  "en-US",
+                  "zh-CN",
                   { month: "long", year: "numeric" }
                 )}
+                注册
               </span>
             </div>
           </div>
@@ -121,11 +120,11 @@ const UserPage = async ({
           <div className="flex gap-4">
             <div className="flex items-center gap-2">
               <span className="font-bold">{user._count.followers}</span>
-              <span className="text-textGray text-[15px]">Followers</span>
+              <span className="text-textGray text-[15px]">关注</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="font-bold">{user._count.followings}</span>
-              <span className="text-textGray text-[15px]">Followings</span>
+              <span className="text-textGray text-[15px]">粉丝</span>
             </div>
           </div>
         </div>

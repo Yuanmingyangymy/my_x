@@ -82,7 +82,7 @@ export default function Share() {
               className="absolute top-2 left-2 text-white bg-black bg-opacity-50 px-4 py-1 rounded-full cursor-pointer"
               onClick={() => setIsEditorOpen(true)}
             >
-              Edit
+              编辑
             </div>
             <div
               className="absolute h-8 w-8 top-2 right-2 flex items-center justify-center rounded-full text-white bg-black bg-opacity-50 text-sm cursor-pointer hover:bg-opacity-100"

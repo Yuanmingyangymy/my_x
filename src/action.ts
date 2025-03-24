@@ -6,6 +6,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { UploadResponse } from "imagekit/dist/libs/interfaces";
 import { imagekit } from "./utils";
+import { User } from "@prisma/client";
 
 // 同步用户信息到数据库
 export async function syncUser() {
@@ -253,5 +254,125 @@ export const addPost = async (
   } catch (err) {
     console.log(err);
     return { success: false, error: true };
+  }
+};
+
+// 更新用户资料
+export const updateUserProfile = async (
+  prevState: { success: boolean; error: boolean; message?: string },
+  formData: FormData
+) => {
+  const { userId } = await auth();
+
+  if (!userId) return { success: false, error: true, message: "未登录" };
+
+  // 先从数据库获取旧用户数据
+  const oldUser = await prisma.user.findUnique({ where: { id: userId } });
+  if (!oldUser) return { success: false, error: true, message: "用户不存在" };
+  const updateData: User = {
+    // 初始化更新数据为旧数据
+    ...oldUser,
+  };
+  const username = formData.get("username") || updateData.username;
+  const bio = formData.get("bio") || updateData.bio;
+  const job = formData.get("job") || updateData.job;
+  const website = formData.get("website") || updateData.website;
+  const img = (formData.get("img") as File) || updateData.img;
+  const cover = (formData.get("cover") as File) || updateData.cover;
+
+  const uploadFile = async (
+    file: File,
+    type: "img" | "cover"
+  ): Promise<UploadResponse> => {
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    return new Promise((resolve, reject) => {
+      imagekit.upload(
+        {
+          file: buffer,
+          fileName: file.name,
+          folder: "/users",
+          transformation: {
+            pre: `${type === "img" ? "w-100,h-100" : "w-600,h-200"}`,
+          },
+        },
+        function (error, result) {
+          if (error) reject(error);
+          else resolve(result as UploadResponse);
+        }
+      );
+    });
+  };
+
+  const UserProfile = z.object({
+    username: z.string().min(4).max(64),
+    bio: z.string().max(255).nullable().optional(),
+    job: z.string().max(100).nullable().optional(),
+    website: z.string().nullable().optional(),
+  });
+
+  const validatedFields = UserProfile.safeParse({
+    username,
+    bio,
+    job,
+    website,
+  });
+
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+    return { success: false, error: true, message: "数据无效" };
+  }
+
+  try {
+    // 仅添加有值的字段到更新数据中
+    if (validatedFields.data.username) {
+      // 检查新的 username 是否已经被其他用户使用
+      const existingUserWithUsername = await prisma.user.findFirst({
+        where: {
+          username: validatedFields.data.username,
+          id: { not: userId },
+        },
+      });
+      if (existingUserWithUsername) {
+        return {
+          success: false,
+          error: true,
+          message: "用户名重复，换一个吧~",
+        };
+      }
+      updateData.username = validatedFields.data.username;
+    }
+    if (validatedFields.data.bio) {
+      updateData.bio = validatedFields.data.bio;
+    }
+    if (validatedFields.data.job) {
+      updateData.job = validatedFields.data.job;
+    }
+    if (validatedFields.data.website) {
+      updateData.website = validatedFields.data.website;
+    }
+
+    // 处理图片上传逻辑，这里假设需要实现图片上传函数
+    if (img?.size) {
+      const imgRes: UploadResponse = await uploadFile(img, "img");
+      updateData.img = imgRes.filePath;
+    }
+
+    if (cover?.size) {
+      const coverPath = await uploadFile(cover, "cover");
+      updateData.cover = coverPath.filePath;
+    }
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    revalidatePath(`/${username}`);
+    return { success: true, error: false, message: "更新成功" };
+  } catch (err) {
+    console.log("更新用户信息出错", err);
+    return { success: false, error: true, message: "更新失败" };
   }
 };
