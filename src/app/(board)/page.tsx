@@ -1,16 +1,13 @@
 import { syncUser } from "@/action";
 import Posts from "@/components/Posts";
 import Share from "@/components/Share";
-import { currentUser } from "@clerk/nextjs/server";
+import toast from "react-hot-toast";
 
 const Homepage = async () => {
-  const user = await currentUser();
-  if (user) {
-    try {
-      await syncUser();
-    } catch (error) {
-      console.log("同步用户信息失败", error);
-    }
+  try {
+    await syncUser();
+  } catch (error) {
+    toast.error("同步用户信息失败");
   }
   return (
     <div className="flex flex-col">

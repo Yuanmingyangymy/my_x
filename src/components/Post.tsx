@@ -161,7 +161,7 @@ const Post = ({
             <p className={`${type === "status" && "text-lg"}`}>{post.desc}</p>
           </Link>
           {post.img && (
-            <Image path={post.img} alt="" w={600} h={post.imgHeight || 600} />
+            <Image path={post.img} alt="" w={1000} h={post.imgHeight || 600} />
           )}
           {post.video && (
             <div className="rounded-lg overflow-hidden">

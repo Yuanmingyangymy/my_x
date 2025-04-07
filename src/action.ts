@@ -185,7 +185,7 @@ export const addPost = async (
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const transformation = `w-600,${
+    const transformation = `w-1000,${
       imgType === "square" ? "ar-1-1" : imgType === "wide" ? "ar-16-9" : ""
     }`;
 

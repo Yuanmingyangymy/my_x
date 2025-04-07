@@ -1,5 +1,6 @@
 import LeftBar from "@/components/LeftBar";
 import RightBar from "@/components/RightBar";
+import Search from "@/components/Search";
 
 export default function RootLayout({
   children,
@@ -17,9 +18,10 @@ export default function RootLayout({
         {children}
         {modal}
       </div>
-      <div className="hidden lg:flex ml-4 md:ml-8 flex-1">
+      <Search />
+      {/* <div className="hidden lg:flex ml-4 md:ml-8 flex-1">
         <RightBar />
-      </div>
+      </div> */}
     </div>
   );
 }
