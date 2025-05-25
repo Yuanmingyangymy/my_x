@@ -1,6 +1,7 @@
 import EditProfile from "@/components/EditProfile";
 import FollowButton from "@/components/FollowButton";
 import Image from "@/components/Image";
+import Logout from "@/components/Logout";
 import Posts from "@/components/Posts";
 import { prisma } from "@/prisma";
 import { auth } from "@clerk/nextjs/server";
@@ -72,6 +73,7 @@ const UserPage = async ({
         </div>
         <div className="flex w-full items-center justify-end gap-2 p-2">
           {isCurrentUser && <EditProfile />}
+          {isCurrentUser && <Logout />}
           {!isCurrentUser && (
             <Link
               href={`/chat/${user.username}`}

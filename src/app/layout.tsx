@@ -12,7 +12,7 @@ export default function RootLayout({
   return (
     <ClerkProvider localization={zhCN}>
       <QueryProvider>
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
           <body>
             {children}
             <Toaster />

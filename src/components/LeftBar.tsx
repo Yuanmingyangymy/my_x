@@ -12,19 +12,19 @@ export default function LeftBar() {
   const [userInfo, setUserInfo] = useState<User>();
   const menuInfo = [
     {
-      // 自己以及关注的人的动态
+      // 所有人的动态
       id: 1,
       name: "首页",
       icon: "icons/home.svg",
       link: "/",
     },
-    // {
-    //   // 使用用户的动态（时间排序）
-    //   id: 2,
-    //   name: "探索",
-    //   icon: "icons/explore.svg",
-    //   link: "/",
-    // },
+    {
+      // 自己以及关注的人的动态）
+      id: 2,
+      name: "动态",
+      icon: "icons/community.svg",
+      link: "/community",
+    },
     // {
     //   // 自己帖子的赞和评论，其他用户@自己的通知
     //   id: 3,
@@ -184,9 +184,6 @@ export default function LeftBar() {
           <div className="hidden xxl:flex flex-col">
             <span className="text-white font-bold truncate w-32">
               {userInfo?.username}
-            </span>
-            <span className="text-textGray truncate w-32">
-              {userInfo?.email}
             </span>
           </div>
         </div>

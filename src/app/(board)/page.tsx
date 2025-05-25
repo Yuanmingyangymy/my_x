@@ -14,7 +14,7 @@ const Homepage = async () => {
       {/* 发帖区 */}
       <Share />
       {/* 展示区 */}
-      <Posts />
+      <Posts showAll={true} />
     </div>
   );
 };

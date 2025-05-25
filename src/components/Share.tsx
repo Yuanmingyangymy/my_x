@@ -59,7 +59,7 @@ export default function Share() {
         />
         <input
           name="desc"
-          placeholder="有什么新鲜事？！"
+          placeholder="畅所欲言吧~"
           className="outline-none bg-transparent text-xl placeholder:text-textGray"
         />
         {/* 图片预览 */}

@@ -6,15 +6,19 @@ import InfinitePosts from "./InfinitePosts";
 
 export default async function Posts({
   userProfileId,
+  showAll,
 }: {
   userProfileId?: string;
+  showAll?: boolean;
 }) {
   const { userId } = await auth();
   if (!userId) return;
 
-  // 获取用户自己以及关注人的帖子（不含评论的帖子）
+  // 动态页获取用户自己以及关注人的帖子（不含评论的帖子）；首页显示所有人的帖子；个人信息页显示自己的帖子
   const whereCondition = userProfileId
     ? { parentPostId: null, userId: userProfileId }
+    : showAll
+    ? { parentPostId: null }
     : {
         parentPostId: null,
         userId: {

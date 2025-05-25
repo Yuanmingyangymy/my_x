@@ -91,7 +91,7 @@ const SignInPage = () => {
             <SignIn.Strategy name="password">
               <Clerk.Field name="password" className="flex flex-col gap-2">
                 <Clerk.Input
-                  placeholder="password"
+                  placeholder="请输入密码"
                   className="py-2 px-6 rounded-full text-black w-72 placeholder:text-sm"
                 />
                 <Clerk.FieldError className="text-red-300 text-sm" />
@@ -120,7 +120,7 @@ const SignInPage = () => {
               <Clerk.Field name="code" className="flex flex-col gap-2">
                 <Clerk.Input
                   className="py-2 px-6 rounded-full text-black w-72 placeholder:text-sm"
-                  placeholder="Verification Code"
+                  placeholder="请输入验证码"
                 />
                 <Clerk.FieldError className="text-red-300 text-sm" />
               </Clerk.Field>
@@ -174,7 +174,7 @@ const SignInPage = () => {
             href="/sign-up"
             className="bg-iconBlue rounded-full p-2 text-white font-bold w-72 text-center"
           >
-            创建账户
+            注册
           </Link>
         </SignIn.Root>
       </div>
