@@ -47,7 +47,7 @@ function EditProfile() {
         编辑
       </button>
       {isOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
+        <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
           <div className="bg-black rounded-xl p-12 flex flex-col gap-4">
             <h2 className="text-2xl font-bold text-white">编辑个人资料</h2>
             <form action={formAction}>
